@@ -8,6 +8,7 @@ import { Briefcase } from "lucide-react";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [password, setPassword] = useState("");
   const { currentUser } = useSelector((store) => store.user);
   const { loading, error } = useSelector((store) => store.user);
@@ -24,6 +25,7 @@ const SignIn = () => {
     e.preventDefault();
 
     try {
+      setIsLoading(true);
       const response = await api.post("/api/auth/login", {
         email,
         password,
@@ -31,14 +33,17 @@ const SignIn = () => {
 
       if (response.status === 200) {
         // login successful
+        setIsLoading(false);
         dispatch(userActions.signInSuccess(response.data));
         navigate("/dashboard");
         // console.log(response.data);
       } else {
         // login failed
+        setIsLoading(false);
         dispatch(userActions.signInFailure(response.message));
       }
     } catch (error) {
+      setIsLoading(false);
       console.log(error.message);
     }
   };
@@ -131,7 +136,7 @@ const SignIn = () => {
             type="submit"
             className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
-            Sign in
+            {isLoading ? "Wait Please!" : "Sign in"}
           </button>
         </div>
 
