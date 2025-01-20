@@ -40,6 +40,7 @@ exports.login = async (req, res) => {
       .cookie("access_token", generateToken(user._id), {
         httpOnly: true,
         maxAge: 1 * 24 * 60 * 60 * 1000,
+        secure: true,
       })
       .status(200)
       .json(rest);
