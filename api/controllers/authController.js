@@ -40,7 +40,9 @@ exports.login = async (req, res) => {
       .cookie("access_token", generateToken(user._id), {
         httpOnly: true,
         maxAge: 1 * 24 * 60 * 60 * 1000,
+        // set secure to false for local tetsing
         secure: true,
+        // for fixing cookie error after deployment
         sameSite: "none",
       })
       .status(200)
